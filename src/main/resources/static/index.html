@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        button {
+            margin: 5px;
+        }
+
+        form {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+<h1>User Management</h1>
+
+<!-- Create User -->
+<h2>Create User</h2>
+<form id="createUserForm">
+    <input type="text" id="createName" placeholder="Name" required>
+    <input type="text" id="createUsername" placeholder="Username" required>
+    <input type="email" id="createEmail" placeholder="Email" required>
+    <input type="password" id="createPassword" placeholder="Password" required>
+    <button type="submit">Create User</button>
+</form>
+
+<!-- Update User -->
+<h2>Update User</h2>
+<form id="updateUserForm">
+    <input type="number" id="updateId" placeholder="User ID" required>
+    <input type="text" id="updateName" placeholder="Name" required>
+    <input type="text" id="updateUsername" placeholder="Username" required>
+    <input type="email" id="updateEmail" placeholder="Email" required>
+    <input type="password" id="updatePassword" placeholder="Password" required>
+    <button type="submit">Update User</button>
+</form>
+
+<!-- Delete User -->
+<h2>Delete User</h2>
+<form id="deleteUserForm">
+    <input type="number" id="deleteId" placeholder="User ID" required>
+    <button type="submit">Delete User</button>
+</form>
+
+<!-- View User -->
+<h2>View User</h2>
+<form id="viewUserForm">
+    <input type="number" id="viewId" placeholder="User ID" required>
+    <button type="submit">View User</button>
+</form>
+
+<script>
+    // Create User
+    document.getElementById('createUserForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        fetch('/createUser', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: document.getElementById('createName').value,
+                username: document.getElementById('createUsername').value,
+                email: document.getElementById('createEmail').value,
+                password: document.getElementById('createPassword').value
+            })
+        }).then(response => response.json())
+            .then(data => alert('User Created: ' + JSON.stringify(data)));
+    });
+
+    // Update User
+    document.getElementById('updateUserForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        fetch(`/updateUser/${document.getElementById('updateId').value}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: document.getElementById('updateName').value,
+                username: document.getElementById('updateUsername').value,
+                email: document.getElementById('updateEmail').value,
+                password: document.getElementById('updatePassword').value
+            })
+        }).then(response => response.json())
+            .then(data => alert('User Updated: ' + JSON.stringify(data)));
+    });
+
+    // Delete User
+    document.getElementById('deleteUserForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        fetch(`/deleteUser/${document.getElementById('deleteId').value}`, {
+            method: 'DELETE',
+        }).then(response => response.json())
+            .then(data => alert('User Deleted: ' + JSON.stringify(data)));
+    });
+
+    // View User
+    document.getElementById('viewUserForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        fetch(`/user/${document.getElementById('viewId').value}`)
+            .then(response => response.json())
+            .then(data => alert('User Data: ' + JSON.stringify(data)));
+    });
+</script>
+</body>
+</html>
